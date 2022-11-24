@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
-from sr_forest_base import EnsembleSR
+from sr_forest.sr_forest_base import EnsembleSR
 
 
 class OperonX(BaseEstimator, RegressorMixin):

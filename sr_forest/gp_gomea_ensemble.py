@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeRegressor
 
-from sr_forest_base import EnsembleSR
+from sr_forest.sr_forest_base import EnsembleSR
 
 
 class GPGOMEAForest(EnsembleSR, BaseEstimator, RegressorMixin):
