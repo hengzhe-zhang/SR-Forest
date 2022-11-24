@@ -11,6 +11,12 @@ Genetic programming (GP) is a population-based ensemble learning framework. Thus
 
 To solve this issue, this open-source project intends to propose a general framework for GP-based ensemble-learning. In general, this package focuses on a general technique for improving the performance of GP-based ensemble learning, rather than improving a specific implementation of symbolic regression technique.
 
+## Installation
+
+```bash
+pip install git+https://github.com/hengzhe-zhang/SR-Forest.git
+```
+
 ## Example
 An example of usage:
 ```python
