@@ -3,14 +3,15 @@ from abc import abstractmethod
 import math
 import numpy as np
 from sklearn import clone
+from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.metrics import r2_score
 
 
-class EnsembleSR():
-    def __init__(self, sr_model=None, decision_tree=None, **kwargs):
+class EnsembleSR(BaseEstimator, RegressorMixin):
+    def __init__(self, sr_model, decision_tree=None, **kwargs):
         self.kwargs = kwargs
-        self.est = sr_model
-        self.dt = decision_tree
+        self.sr_model = sr_model
+        self.decision_tree = decision_tree
         self.dt_list = []
         self.ensemble_size = 0
         self.selected_index = None
@@ -24,24 +25,24 @@ class EnsembleSR():
         pass
 
     def fit(self, X, y):
-        est = self.est
+        est = self.sr_model
         est.fit(X, y)
         self.ensemble_size = self.threshold_determination(est, X, y)
         predictions = self.top_predictions(est, X, self.ensemble_size)
-        if self.dt is not None:
+        if self.decision_tree is not None:
             for prediction in predictions:
-                dt = clone(self.dt)
+                dt = clone(self.decision_tree)
                 dt.fit(X, y - prediction)
                 self.dt_list.append(dt)
         return self
 
     def predict(self, X):
-        if self.dt is not None:
-            predictions = self.top_predictions(self.est, X, self.ensemble_size)
+        if self.decision_tree is not None:
+            predictions = self.top_predictions(self.sr_model, X, self.ensemble_size)
             for id, prediction in enumerate(predictions):
                 predictions[id] = prediction + self.dt_list[id].predict(X)
         else:
-            predictions = self.top_predictions(self.est, X, self.ensemble_size)
+            predictions = self.top_predictions(self.sr_model, X, self.ensemble_size)
         prediction = np.mean(predictions, axis=0).flatten()
         return prediction
 
