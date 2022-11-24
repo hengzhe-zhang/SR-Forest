@@ -21,7 +21,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeRegressor
 from xgboost import XGBRegressor
 
-from sr_forest.gp_gomea_ensemble import GPGOMEAForest
+from sr_forest.gp_gomea_forest import GPGOMEAForest
 
 
 def train_and_test(key):
