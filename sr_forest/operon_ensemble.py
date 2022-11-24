@@ -490,9 +490,14 @@ class OperonForest(EnsembleSR):
         sr_model = OperonX(**kwargs)
         super().__init__(sr_model, decision_tree, **kwargs)
 
+    def fit(self, X, y):
+        self.linear_scaling = set()
+        return super().fit(X, y)
+
     def threshold_determination(self, est, X, y):
         prediction = self.make_prediction(X, est)
-        fitness_values = [mean_squared_error(y, p) for p in prediction]
+        # sorting in ascending order
+        fitness_values = [-1 * r2_score(y, p) for p in prediction]
         return self.ensemble_selection(fitness_values, prediction, y)
 
     def top_predictions(self, est, X, ensemble_size):
@@ -501,18 +506,15 @@ class OperonForest(EnsembleSR):
         return prediction
 
     def make_prediction(self, X, est):
-        manual_compile = False
-        if manual_compile:
-            individuals = [est.get_model_string(x.Genotype) for x in est.individuals_]
-            parents = individuals[est.population_size:]
-            prediction = [eval(f'lambda ' + ','.join([f'X{i + 1}' for i in range(X.shape[1])]) + ' : ' + p)(*X.T)
-                          for p in parents]
-            prediction = [p if isinstance(p, np.ndarray) else np.full(X.shape[0], p)
-                          for p in prediction]
-            prediction = [np.nan_to_num(p) for p in prediction]
-        else:
-            prediction = [est.evaluate_model(x.Genotype, X) for x in est.individuals_]
-            # prediction = prediction + [est.evaluate_model(x, X) for x in [est.model_]]
+        for id, x in enumerate(est.individuals_):
+            if not id in self.linear_scaling:
+                y_pred = est.evaluate_model(x.Genotype, X)
+                scale, offset = op.FitLeastSquares(y_pred, y)
+                nodes = x.Genotype.Nodes + [op.Node.Constant(scale), op.Node.Mul(), op.Node.Constant(offset),
+                                            op.Node.Add()]
+                x.Genotype = op.Tree(nodes).UpdateNodes()
+                self.linear_scaling.add(id)
+        prediction = [est.evaluate_model(x.Genotype, X) for x in est.individuals_]
         return prediction
 
 
