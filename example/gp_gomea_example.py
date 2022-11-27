@@ -61,7 +61,7 @@ model_list = {
     'GBDT': GradientBoostingRegressor(n_estimators=100),
     'XGBoost': XGBRegressor(n_estimators=100, n_jobs=1),
     'LightGBM': LGBMRegressor(n_estimators=100, n_jobs=1),
-    'SR-Forest(GOMEA)': GPGOMEAForest(generations=20, decision_tree=DecisionTreeRegressor(splitter='random'))
+    'SR-Forest(GOMEA)': GPGOMEAForest(decision_tree=DecisionTreeRegressor(splitter='random'))
 }
 
 all_score = []

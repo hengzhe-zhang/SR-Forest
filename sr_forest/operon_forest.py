@@ -486,12 +486,8 @@ class OperonX(BaseEstimator, RegressorMixin):
 
 
 class OperonForest(EnsembleSR):
-    def __init__(self, decision_tree=None, **kwargs):
-        sr_model = OperonX(**kwargs)
-        super().__init__(sr_model, decision_tree, **kwargs)
-
-    def fit(self, X, y):
-        return super().fit(X, y)
+    def __init__(self, sr_model=None, decision_tree=None):
+        super().__init__(sr_model, decision_tree)
 
     def threshold_determination(self, est, X, y):
         prediction = self.make_prediction(X, est)
@@ -520,12 +516,13 @@ if __name__ == '__main__':
     print(r2_score(y_train, e.predict(x_train)))
     print(r2_score(y_test, e.predict(x_test)))
 
-    e = OperonForest(generations=100, population_size=500)
+    e = OperonForest(OperonX(generations=100, population_size=500))
     e.fit(x_train, y_train)
     print(r2_score(y_train, e.predict(x_train)))
     print(r2_score(y_test, e.predict(x_test)))
 
-    e = OperonForest(generations=100, population_size=500, decision_tree=DecisionTreeRegressor(splitter='random'))
+    e = OperonForest(OperonX(generations=100, population_size=500),
+                     decision_tree=DecisionTreeRegressor(splitter='random'))
     e.fit(x_train, y_train)
     print(r2_score(y_train, e.predict(x_train)))
     print(r2_score(y_test, e.predict(x_test)))

@@ -8,8 +8,7 @@ from sklearn.metrics import r2_score
 
 
 class EnsembleSR(BaseEstimator, RegressorMixin):
-    def __init__(self, sr_model, decision_tree=None, **kwargs):
-        self.kwargs = kwargs
+    def __init__(self, sr_model, decision_tree=None):
         self.sr_model = sr_model
         self.decision_tree = decision_tree
         self.dt_list = []
