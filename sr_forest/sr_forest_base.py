@@ -17,6 +17,7 @@ class EnsembleSR(BaseEstimator, RegressorMixin):
 
     @abstractmethod
     def top_predictions(self, est, X, ensemble_size):
+        # get predictions from top-performing individuals
         pass
 
     @abstractmethod

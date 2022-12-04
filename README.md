@@ -34,8 +34,9 @@ A comparative example on the "Friedman-1" function:
 
 More base learners are still in development.
 
-* [Operon](https://github.com/hengzhe-zhang/SR-Forest/blob/master/sr_forest/operon_ensemble.py)
-* [GP-GOMEA](https://github.com/hengzhe-zhang/SR-Forest/blob/master/sr_forest/gp_gomea_ensemble.py)
+* [Operon](https://github.com/hengzhe-zhang/SR-Forest/blob/master/sr_forest/operon_forest.py)
+* [GP-GOMEA](https://github.com/hengzhe-zhang/SR-Forest/blob/master/sr_forest/gp_gomea_forest.py)
+* [FEAT](https://github.com/hengzhe-zhang/SR-Forest/blob/master/sr_forest/feat_forest.py)
 
 ## Citation
 
