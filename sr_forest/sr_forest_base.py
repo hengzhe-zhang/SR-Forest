@@ -29,18 +29,24 @@ class EnsembleSR(BaseEstimator, RegressorMixin):
         est.fit(X, y)
         self.ensemble_size = self.threshold_determination(est, X, y)
         predictions = self.top_predictions(est, X, self.ensemble_size)
+        predictions = np.nan_to_num(predictions)
         if self.decision_tree is not None:
             for prediction in predictions:
                 dt = clone(self.decision_tree)
-                dt.fit(X, y - prediction)
+                X_DT = np.concatenate([X, np.reshape(prediction, (-1, 1))], axis=1)
+                # X_DT = X
+                dt.fit(X_DT, y - prediction)
                 self.dt_list.append(dt)
         return self
 
     def predict(self, X):
         if self.decision_tree is not None:
             predictions = self.top_predictions(self.sr_model, X, self.ensemble_size)
+            predictions = np.nan_to_num(predictions)
             for id, prediction in enumerate(predictions):
-                predictions[id] = prediction + self.dt_list[id].predict(X)
+                X_DT = np.concatenate([X, np.reshape(prediction, (-1, 1))], axis=1)
+                # X_DT = X
+                predictions[id] = prediction + self.dt_list[id].predict(X_DT)
         else:
             predictions = self.top_predictions(self.sr_model, X, self.ensemble_size)
         prediction = np.mean(predictions, axis=0).flatten()

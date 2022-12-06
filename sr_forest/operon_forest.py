@@ -511,18 +511,20 @@ if __name__ == '__main__':
     X, y = np.array(X), np.array(y)
     x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
-    e = OperonX(generations=100, population_size=500)
+    e = OperonX(generations=100, population_size=100)
     e.fit(x_train, y_train)
     print(r2_score(y_train, e.predict(x_train)))
     print(r2_score(y_test, e.predict(x_test)))
 
-    e = OperonForest(OperonX(generations=100, population_size=500))
+    e = OperonForest(OperonX(generations=100, population_size=100))
     e.fit(x_train, y_train)
+    print('Ensemble Size', len(e.selected_index))
     print(r2_score(y_train, e.predict(x_train)))
     print(r2_score(y_test, e.predict(x_test)))
 
-    e = OperonForest(OperonX(generations=100, population_size=500),
+    e = OperonForest(OperonX(generations=100, population_size=100),
                      decision_tree=DecisionTreeRegressor(splitter='random'))
     e.fit(x_train, y_train)
+    print('Ensemble Size', len(e.selected_index))
     print(r2_score(y_train, e.predict(x_train)))
     print(r2_score(y_test, e.predict(x_test)))
