@@ -1,6 +1,6 @@
 import numpy as np
 from feat import Feat
-from sklearn.datasets import load_boston
+from sklearn.datasets import load_diabetes
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score
 from sklearn.model_selection import train_test_split
@@ -31,7 +31,7 @@ class EnsembleFeat(EnsembleSR):
 
 
 if __name__ == '__main__':
-    X, y = load_boston(return_X_y=True)
+    X, y = load_diabetes(return_X_y=True)
     X = StandardScaler().fit_transform(X)
     X, y = np.array(X), np.array(y)
     x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
